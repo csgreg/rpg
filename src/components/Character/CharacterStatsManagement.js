@@ -1,11 +1,12 @@
 import { doc, setDoc } from "@firebase/firestore";
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
+import { useData } from "../../contexts/DataContext";
 import db from "../../firebase";
 
 export default function CharacterStatsManagement({ character }) {
-  //loading state to disable the buttons while the functions finish
   const [loading, setLoading] = useState(false);
+  const { updateCharacter } = useData();
 
   //increase strength button handler
   async function increaseStrength() {
@@ -17,12 +18,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.strength += 1;
     }
-    //select the characters table and the current character's ID
-    const docRef = doc(db, "characters", character.id);
-    //the new "row" for the character
-    const payload = character;
-    //upload
-    await setDoc(docRef, payload);
+    await updateCharacter(character);
     setLoading(false);
   }
 
@@ -34,9 +30,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.intellect += 1;
     }
-    const docRef = doc(db, "characters", character.id);
-    const payload = character;
-    await setDoc(docRef, payload);
+    await updateCharacter(character);
     setLoading(false);
   }
 
@@ -48,9 +42,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.dexterity += 1;
     }
-    const docRef = doc(db, "characters", character.id);
-    const payload = character;
-    await setDoc(docRef, payload);
+    await updateCharacter(character);
     setLoading(false);
   }
 
@@ -62,9 +54,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.stamina += 1;
     }
-    const docRef = doc(db, "characters", character.id);
-    const payload = character;
-    await setDoc(docRef, payload);
+    await updateCharacter(character);
     setLoading(false);
   }
 
@@ -76,9 +66,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.critical += 1;
     }
-    const docRef = doc(db, "characters", character.id);
-    const payload = character;
-    await setDoc(docRef, payload);
+    await updateCharacter(character);
     setLoading(false);
   }
 

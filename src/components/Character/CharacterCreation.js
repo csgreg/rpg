@@ -3,20 +3,17 @@ import React, { useRef, useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import db from "../../firebase";
 import { useAuth } from "../../contexts/AuthContext";
+import { useData } from "../../contexts/DataContext";
 
 export default function CharacterCreation({
   setCharacterCreation,
   setCharacter,
-  characters,
 }) {
+  const { characters } = useData();
   const [error, setError] = useState("");
-
   const [selectedRole, setselectedRole] = useState("");
-
   const [loading, setLoading] = useState(false);
-
   const nameRef = useRef();
-
   const { currentUser } = useAuth();
 
   async function handleSubmit(e) {
