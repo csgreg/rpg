@@ -49,7 +49,10 @@ export default function CharacterStatsManagement({ character }) {
   //copy-paste
   async function increaseStamina() {
     setLoading(true);
-    const price = 0.5 + (character.dexterity - 5) * 0.5;
+    const price = 0.5 + (character.stamina - 5) * 0.5;
+    console.log(price);
+    console.log(character.gold);
+    console.log(character.gold >= price);
     if (character.gold >= price) {
       character.gold -= price;
       character.stamina += 1;

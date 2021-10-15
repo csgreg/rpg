@@ -1,14 +1,16 @@
 import Signup from "./components/auth/Signup";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Character from "./components/Character";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import UpdateProfile from "./components/auth/UpdateProfile";
-import React from "react";
+import React, { useState } from "react";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import Profession from "./components/Profession";
-import { DataProvider } from "./contexts/DataContext";
+import { DataProvider, useData } from "./contexts/DataContext";
+import Adventure from "./components/Adventure";
+import Marketplace from "./components/Marketplace";
 
 function App() {
   return (
@@ -36,6 +38,12 @@ function App() {
               <DataProvider>
                 <PrivateRoute exact path="/" component={Character} />
                 <PrivateRoute exact path="/profession" component={Profession} />
+                <PrivateRoute exact path="/adventure" component={Adventure} />
+                <PrivateRoute
+                  exact
+                  path="/marketplace"
+                  component={Marketplace}
+                />
               </DataProvider>
             </div>
           </Switch>

@@ -20,7 +20,7 @@ export default function GNavbar() {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">RPG</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -34,6 +34,10 @@ export default function GNavbar() {
 
             <Nav.Link>
               <Link to="/adventure">Adventure</Link>
+            </Nav.Link>
+
+            <Nav.Link>
+              <Link to="/marketplace">Marketplace</Link>
             </Nav.Link>
 
             <Nav.Link>

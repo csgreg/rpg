@@ -2,13 +2,15 @@ import React, { useRef, useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
+import db from "../../firebase";
 
 export default function Login() {
   const emailRef = useRef();
   const passwordlRef = useRef();
   const history = useHistory();
 
-  const { login } = useAuth();
+  const { login, currentUser } = useAuth();
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,6 +21,7 @@ export default function Login() {
     try {
       setError("");
       setLoading(true);
+
       await login(emailRef.current.value, passwordlRef.current.value);
       history.push("/");
     } catch (e) {

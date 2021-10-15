@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
+import firebase from "@firebase/app-compat";
+import db from "../firebase";
+import { addDoc, collection, getDocs, query, where } from "@firebase/firestore";
 
 const AuthContext = React.createContext();
 
@@ -9,15 +12,19 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
+  const [characterId, setCharacterId] = useState("");
   const [loading, setLoading] = useState(true);
 
   //return all because these are promises -> async calls
 
-  function signup(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password);
+  async function signup(email, password) {
+    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+
+    return await auth.createUserWithEmailAndPassword(email, password);
   }
 
-  function login(email, password) {
+  async function login(email, password) {
+    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
     return auth.signInWithEmailAndPassword(email, password);
   }
 
@@ -38,8 +45,36 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      setCharacterId("");
       setCurrentUser(user);
+      let created = false;
+      if (user) {
+        const q = query(
+          collection(db, "characters"),
+          where("userId", "==", user.uid)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          setCharacterId(doc.id);
+          created = true;
+        });
+        if (!created) {
+          const collectionRef = collection(db, "characters");
+          const payload = {
+            userId: user.uid,
+          };
+
+          try {
+            const c = await addDoc(collectionRef, payload);
+            setCharacterId(c.id);
+          } catch {
+            console.log(
+              "Failed to create initial character! Please try again later!"
+            );
+          }
+        }
+      }
       setLoading(false);
     });
 
@@ -54,6 +89,8 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
+    loading,
+    characterId,
   };
 
   return (

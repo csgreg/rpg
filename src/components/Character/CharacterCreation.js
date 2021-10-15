@@ -8,8 +8,10 @@ import { useData } from "../../contexts/DataContext";
 export default function CharacterCreation({
   setCharacterCreation,
   setCharacter,
+  character,
 }) {
-  const { characters } = useData();
+  const { characters, updateCharacter } = useData();
+
   const [error, setError] = useState("");
   const [selectedRole, setselectedRole] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,6 +19,7 @@ export default function CharacterCreation({
   const { currentUser } = useAuth();
 
   async function handleSubmit(e) {
+    let id = currentUser.id;
     setError("");
     e.preventDefault();
     setLoading(true);
@@ -42,29 +45,19 @@ export default function CharacterCreation({
     }
 
     const collectionRef = collection(db, "characters");
-    const payload = {
-      name: nameRef.current.value,
-      role: selectedRole,
-      strength: 5,
-      intellect: 5,
-      dexterity: 5,
-      stamina: 5,
-      critical: 25,
-      armor: 0,
-      gold: 10,
-      xp: 0,
-      crystal: 10,
-      profession: "",
-      userId: currentUser.uid,
-    };
+    character.name = nameRef.current.value;
+    character.role = selectedRole;
+    character.strength = 5;
+    character.intellect = 5;
+    character.dexterity = 5;
+    character.stamina = 5;
+    character.critical = 25;
+    character.armor = 0;
+    character.gold = 10;
+    character.crystal = 10;
+    character.xp = 0;
 
-    try {
-      setError("");
-      const c = await addDoc(collectionRef, payload);
-      setCharacter({ id: c.id, ...payload });
-    } catch {
-      setError("Failed to create character!");
-    }
+    await updateCharacter(character);
     setCharacterCreation(false);
     setLoading(false);
   }

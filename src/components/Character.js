@@ -1,4 +1,4 @@
-import { collection, onSnapshot } from "@firebase/firestore";
+import { collection, doc, onSnapshot } from "@firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import db from "../firebase";
@@ -8,28 +8,28 @@ import CharacterManagement from "./Character/CharacterManagement";
 import { useData } from "../contexts/DataContext";
 
 export default function Character() {
-  const [initializing, setInitializing] = useState(true);
   const [character, setCharacter] = useState({});
 
+  const [initializing, setInitializing] = useState(true);
+  const [materials, setMaterials] = useState([]);
   const [characterCreation, setCharacterCreation] = useState(true);
-
-  const { currentUser } = useAuth();
+  const { characterId, currentUser } = useAuth();
   const { characters } = useData();
 
-  //wait backend information (loading)
   if (initializing && characters.length !== 0) {
-    //check the user created character or not
-    for (let character of characters) {
-      if (character.userId === currentUser.uid) {
-        //set the user's character
-        setCharacter(character);
-        setCharacterCreation(false);
-      }
-    }
-
-    //remove loading screen
     setInitializing(false);
   }
+
+  useEffect(async () => {
+    if (characterId)
+      await onSnapshot(doc(db, "characters", characterId), (doc) => {
+        let newcharacter = doc.data();
+        setCharacter({ ...newcharacter, id: characterId });
+        if (newcharacter.name) {
+          setCharacterCreation(false);
+        }
+      });
+  }, [characterId]);
 
   return (
     <>
@@ -39,6 +39,7 @@ export default function Character() {
         <div>
           <CharacterCreation
             setCharacter={setCharacter}
+            character={character}
             setCharacterCreation={setCharacterCreation}
           />
         </div>
