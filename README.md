@@ -1,3 +1,9 @@
-# rpg
+# Online RPG game with Firestore database and Firebase Authenticantion from Firebase
 
-To install use npm install and npm start
+```bash
+npm install
+```
+
+```bash
+npm start
+```
