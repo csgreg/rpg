@@ -29,8 +29,8 @@ export default function ForgotPassword() {
   }
 
   return (
-    <>
-      <Card className="m-2">
+    <div style={{ marginTop: "20vh" }} className="login">
+      <Card id="resetpwcard" className="m-2">
         <Card.Body>
           <h2 className="text-center mb-4">Password Reset</h2>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -38,21 +38,38 @@ export default function ForgotPassword() {
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-2" id="email">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required></Form.Control>
+
+              <Form.Control
+                style={{ background: "transparent" }}
+                placeholder="example@example.com"
+                type="email"
+                ref={emailRef}
+                required
+              ></Form.Control>
             </Form.Group>
 
-            <Button disabled={loading} className="w-100 mt-3" type="submit">
+            <Button
+              id="resetbtn"
+              disabled={loading}
+              className="w-100 mt-3"
+              type="submit"
+            >
               Reset Password
             </Button>
           </Form>
           <div className="w-100 text-center mt-3">
-            <Link to="/login">Log in</Link>
+            <Link className="loginlink" to="/login">
+              Log in
+            </Link>
           </div>
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        Need an account? <Link to="/signup">Sign Up</Link>
+        Need an account?{" "}
+        <Link className="loginlink" to="/signup">
+          Sign Up
+        </Link>
       </div>
-    </>
+    </div>
   );
 }

@@ -37,9 +37,8 @@ export default function Marketplace() {
       {initializing && <div>Loading...</div>}
       {!initializing && (
         <div>
-          <GNavbar />
-          <ManageOurAuctions />
-          <AllAuctions />
+          <ManageOurAuctions character={character} />
+          <AllAuctions character={character} />
           <CreateAuction character={character} />
         </div>
       )}

@@ -21,14 +21,20 @@ export function useData() {
 export function DataProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [characters, setCharacters] = useState([]);
-  const [professions, setProfessions] = useState([]);
   const [adventures, setAdventures] = useState([]);
   const [materials, setMaterials] = useState([]);
+  const [items, setItems] = useState([]);
   const { currentUser } = useAuth();
 
   async function updateCharacter(character) {
     const docRef = doc(db, "characters", character.id);
     const payload = character;
+    await setDoc(docRef, payload);
+  }
+
+  async function updateAuction(auction) {
+    const docRef = doc(db, "marketplace", auction.id);
+    const payload = auction;
     await setDoc(docRef, payload);
   }
 
@@ -50,6 +56,14 @@ export function DataProvider({ children }) {
     []
   );
 
+  useEffect(
+    async () =>
+      await onSnapshot(collection(db, "items"), (snapshot) => {
+        setItems(snapshot.docs.map((doc) => ({ ...doc.data() })));
+      }),
+    []
+  );
+
   async function getMaterialsByIds(ids) {
     const q = query(collection(db, "materials"), where("id", "in", ids));
     let materials = [];
@@ -60,10 +74,26 @@ export function DataProvider({ children }) {
     return materials;
   }
 
-  async function getMaterialById(id) {
+  function getMaterialById(id) {
+    for (let m of materials) {
+      if (m.id == id) {
+        return m.name;
+      }
+    }
+  }
+
+  function getMaterialByIdFull(id) {
     for (let m of materials) {
       if (m.id == id) {
         return m;
+      }
+    }
+  }
+
+  function getMaterialFile(id) {
+    for (let m of materials) {
+      if (m.id == id) {
+        return m.file;
       }
     }
   }
@@ -72,16 +102,6 @@ export function DataProvider({ children }) {
     for (let c of characters) {
       if (c.userId === currentUser.uid) {
         return c;
-      }
-    }
-  }
-
-  function getMaterialById(id) {
-    if (materials.length !== 0) {
-      for (let m of materials) {
-        if (m.id == id) {
-          return m.name;
-        }
       }
     }
   }
@@ -96,16 +116,6 @@ export function DataProvider({ children }) {
 
   useEffect(
     async () =>
-      await onSnapshot(collection(db, "professions"), (snapshot) =>
-        setProfessions(
-          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-        )
-      ),
-    []
-  );
-
-  useEffect(
-    async () =>
       await onSnapshot(collection(db, "adventures"), (snapshot) =>
         setAdventures(
           snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
@@ -117,8 +127,8 @@ export function DataProvider({ children }) {
   if (
     loading &&
     characters.length !== 0 &&
-    professions.length !== 0 &&
-    adventures.length !== 0
+    adventures.length !== 0 &&
+    materials.length !== 0
   ) {
     setLoading(false);
   }
@@ -126,15 +136,16 @@ export function DataProvider({ children }) {
   const value = {
     characters,
     loading,
-    professions,
     adventures,
     materials,
     updateCharacter,
     getCharacterByUserId,
+    getMaterialByIdFull,
     getMaterialsByIds,
     getAdventureById,
     getMaterialById,
-    getMaterialById,
+    updateAuction,
+    getMaterialFile,
   };
 
   return (

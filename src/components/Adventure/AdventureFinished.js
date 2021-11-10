@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Row } from "react-bootstrap";
 import { useData } from "../../contexts/DataContext";
+import coin from "../../assets/imgs/coin.png";
+import CharacterMaterials from "../Items/CharacterMaterials";
 
 export default function AdventureFinished({
   character,
@@ -11,10 +13,15 @@ export default function AdventureFinished({
   setLootCalculated,
 }) {
   const [initializing, setInitializing] = useState(true);
-
+  const [adventure, setAdventure] = useState({});
   const [loot, setLoot] = useState([]);
 
-  const { getAdventureById, getMaterialsByIds, updateCharacter } = useData();
+  const {
+    getAdventureById,
+    getMaterialsByIds,
+    updateCharacter,
+    getMaterialFile,
+  } = useData();
 
   if (initializing) {
     if (character.lootCalculated) {
@@ -23,6 +30,7 @@ export default function AdventureFinished({
     }
 
     setInitializing(false);
+    setAdventure(getAdventureById(character.adventure));
   }
 
   function getRandomInt(max) {
@@ -30,7 +38,8 @@ export default function AdventureFinished({
   }
 
   function getRandomIntBetween(min, max) {
-    return Math.random() * (max - min) + min;
+    let a = Math.random() * (max - min) + min;
+    return a;
   }
 
   async function handleGetReward() {
@@ -49,12 +58,11 @@ export default function AdventureFinished({
     }
 
     console.log("Loot:", loot);
-    let gold = (
-      getRandomIntBetween(adventure.mingold * 10, adventure.maxgold * 10) / 10
-    ).toFixed(1);
-    let xp = getRandomIntBetween(adventure.minxp, adventure.maxxp).toFixed(0);
-    character.xp += parseInt(xp);
-    character.gold += parseInt(gold);
+    let gold = getRandomIntBetween(adventure.mingold, adventure.maxgold);
+    let xp = getRandomIntBetween(adventure.minxp, adventure.maxxp);
+
+    character.adventurexp = parseInt(xp);
+    character.adventuregold = Math.round(gold * 100) / 100;
     character.loot = loot;
     character.lootCalculated = true;
     await updateCharacter(character);
@@ -75,6 +83,9 @@ export default function AdventureFinished({
     character.adventureStarted = false;
     character.lootCalculated = false;
 
+    character.gold += parseFloat(character.adventuregold);
+    character.xp += parseInt(character.adventurexp);
+
     setAdventureStarted(false);
     setAdventureEnded(false);
     setLootCalculated(false);
@@ -85,18 +96,59 @@ export default function AdventureFinished({
     <div>
       {initializing && <div className="m-3">Loading...</div>}
       {!initializing && !lootCalculated && (
-        <div className="m-3">
-          <Button onClick={() => handleGetReward()}>Get Reward</Button>
+        <div
+          id="adventureCount"
+          className="d-flex align-items-center justify-content-center vertical-center"
+        >
+          <div>
+            <p id="adventureName">{adventure.name}</p>
+            <p id="adventureCounter" className="text-center">
+              <div className="w-100">
+                <Button
+                  className="mb-2"
+                  id="getrewardBtn"
+                  onClick={() => handleGetReward()}
+                >
+                  Get Reward
+                </Button>
+              </div>
+            </p>
+          </div>
         </div>
       )}
       {!initializing && lootCalculated && (
-        <div className="m-3">
-          {character.loot.map((l) => (
-            <div>
-              <p>{l.name}</p>
+        <div
+          id="adventureCount"
+          className="d-flex align-items-center justify-content-center vertical-center"
+        >
+          <div>
+            <p id="adventureName">{adventure.name}</p>
+
+            <div className="w-100">
+              <span className="adventurereward">
+                {character.adventuregold} <img id="navCoinIcon" src={coin} />
+              </span>
+              <br />
+              <span className="adventurereward">
+                {character.adventurexp} xp
+              </span>
+              <Row
+                className="mt-3"
+                lg={character.loot.length}
+                md={character.loot.length}
+                sm={character.loot.length}
+                xs={character.loot.length}
+              >
+                {character.loot.map((m) => (
+                  <CharacterMaterials width="40px" imageName={m.file} />
+                ))}
+              </Row>
+
+              <Button id="returnBtn" onClick={() => handleLootConfirmed()}>
+                Return
+              </Button>
             </div>
-          ))}
-          <Button onClick={() => handleLootConfirmed()}>Return</Button>
+          </div>
         </div>
       )}
     </div>

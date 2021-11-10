@@ -1,8 +1,9 @@
 import { doc, setDoc } from "@firebase/firestore";
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Row } from "react-bootstrap";
 import { useData } from "../../contexts/DataContext";
-import db from "../../firebase";
+import { FaPlus } from "react-icons/fa";
+import coin from "../../assets/imgs/coin.png";
 
 export default function CharacterStatsManagement({ character }) {
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.strength += 1;
     }
+    character.gold = Math.round(character.gold * 100) / 100;
     await updateCharacter(character);
     setLoading(false);
   }
@@ -30,6 +32,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.intellect += 1;
     }
+    character.gold = Math.round(character.gold * 100) / 100;
     await updateCharacter(character);
     setLoading(false);
   }
@@ -42,6 +45,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.dexterity += 1;
     }
+    character.gold = Math.round(character.gold * 100) / 100;
     await updateCharacter(character);
     setLoading(false);
   }
@@ -57,6 +61,7 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.stamina += 1;
     }
+    character.gold = Math.round(character.gold * 100) / 100;
     await updateCharacter(character);
     setLoading(false);
   }
@@ -69,43 +74,61 @@ export default function CharacterStatsManagement({ character }) {
       character.gold -= price;
       character.critical += 1;
     }
+    character.gold = Math.round(character.gold * 100) / 100;
     await updateCharacter(character);
     setLoading(false);
   }
 
   return (
     <div>
-      <p>
-        Strength: {character.strength}{" "}
-        <Button disabled={loading} onClick={() => increaseStrength()}>
-          - {0.5 + (character.strength - 5) * 0.5} gold to increase
-        </Button>
-      </p>
-      <p>
-        Intellect: {character.intellect}{" "}
-        <Button disabled={loading} onClick={() => increaseIntellect()}>
-          - {0.5 + (character.intellect - 5) * 0.5} gold to increase
-        </Button>
-      </p>
-      <p>
-        Dexterity: {character.dexterity}{" "}
-        <Button disabled={loading} onClick={() => increaseDexterity()}>
-          - {0.5 + (character.dexterity - 5) * 0.5} gold to increase
-        </Button>
-      </p>
-      <p>
-        Stamina: {character.stamina}{" "}
-        <Button disabled={loading} onClick={() => increaseStamina()}>
-          - {0.5 + (character.stamina - 5) * 0.5} gold to increase
-        </Button>
-      </p>
-      <p>
-        Fortune: {character.critical}{" "}
-        <Button disabled={loading} onClick={() => increaseFortune()}>
-          - {0.5 + (character.critical - 25) * 0.5} gold to increase
-        </Button>
-      </p>
-      <p>Armor: {character.armor}</p>
+      <Row id="characterStatmanagement" lg={2} md={2} sm={2} xs={2}>
+        <div id="characterstats">
+          <p className="characterStatDisplay">
+            Strength: {character.strength}{" "}
+          </p>
+          <p className="characterStatDisplay">
+            Intellect: {character.intellect}{" "}
+          </p>
+          <p className="characterStatDisplay">
+            Dexterity: {character.dexterity}{" "}
+          </p>
+          <p className="characterStatDisplay">Stamina: {character.stamina} </p>
+          <p className="characterStatDisplay">Fortune: {character.critical} </p>
+          <p className="characterStatDisplay">Armor: {character.armor}</p>
+        </div>
+        <div>
+          <p onClick={() => increaseStrength()} className="increaseStat">
+            <span className="increaseStatinner">
+              <FaPlus /> {0.5 + (character.strength - 5) * 0.5}{" "}
+              <img id="navCoinIcon" src={coin} />
+            </span>
+          </p>
+          <p onClick={() => increaseIntellect()} className="increaseStat">
+            <span className="increaseStatinner">
+              <FaPlus /> {0.5 + (character.intellect - 5) * 0.5}{" "}
+              <img id="navCoinIcon" src={coin} />
+            </span>
+          </p>
+          <p onClick={() => increaseDexterity()} className="increaseStat">
+            <span className="increaseStatinner">
+              <FaPlus /> {0.5 + (character.dexterity - 5) * 0.5}{" "}
+              <img id="navCoinIcon" src={coin} />
+            </span>
+          </p>
+          <p onClick={() => increaseStamina()} className="increaseStat">
+            <span className="increaseStatinner">
+              <FaPlus /> {0.5 + (character.stamina - 5) * 0.5}{" "}
+              <img id="navCoinIcon" src={coin} />
+            </span>
+          </p>
+          <p onClick={() => increaseFortune()} className="increaseStat">
+            <span className="increaseStatinner">
+              <FaPlus /> {0.5 + (character.critical - 25) * 0.5}{" "}
+              <img id="navCoinIcon" src={coin} />
+            </span>
+          </p>
+        </div>
+      </Row>
     </div>
   );
 }

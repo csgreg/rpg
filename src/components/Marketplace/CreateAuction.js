@@ -33,14 +33,19 @@ export default function CreateAuction({ character }) {
     }
     if (!quantity) {
       setError("Please set the quantity!");
+      setLoading(false);
       return;
     }
     if (!selectedMaterial || selectedMaterial == -1) {
       setError("Something went wrong!");
+      setLoading(false);
+      return;
     }
 
     if (character.materials[selectedMaterial] < quantity) {
       setError("Failed to create auction, you dont have enough material!");
+      setLoading(false);
+      return;
     } else {
       character.materials[selectedMaterial] -= quantity;
     }
@@ -71,34 +76,36 @@ export default function CreateAuction({ character }) {
     <div>
       {initializing && <div>Loading...</div>}
       {!initializing && (
-        <div className="w-50 m-4">
+        <div className="w-90 m-4">
           <Card>
             <Card.Header>Create auction</Card.Header>
             <Card.Body>
               <Card.Text>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={(e) => handleSubmit(e)}>
-                  <Form.Group className="mb-3 w-25" controlId="formBasicEmail">
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Price</Form.Label>
                     <Form.Control
                       step=".01"
+                      min="0.01"
                       onChange={(e) => setGold(e.target.value)}
                       type="number"
                       placeholder="Price"
                     />
                   </Form.Group>
-                  <Form.Group className="mb-3 w-25">
+                  <Form.Group className="mb-3">
                     <Form.Label>Quantity</Form.Label>
                     <Form.Control
                       onChange={(e) => setQuantity(e.target.value)}
                       type="number"
                       placeholder="Quantity"
+                      min="0"
                     />
                   </Form.Group>
 
                   <Form.Label>Material</Form.Label>
                   <select
-                    className="form-select w-25"
+                    className="form-select"
                     aria-label="Default select example"
                     onChange={(e) => setSelectedMaterial(e.target.value)}
                   >
@@ -107,7 +114,12 @@ export default function CreateAuction({ character }) {
                       <option value={m}>{getMaterialById(m)}</option>
                     ))}
                   </select>
-                  <Button disabled={loading} type="submit" variant="primary">
+                  <Button
+                    className="mt-4"
+                    disabled={loading}
+                    type="submit"
+                    variant="primary"
+                  >
                     Create
                   </Button>
                 </Form>

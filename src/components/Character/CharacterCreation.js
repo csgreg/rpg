@@ -1,25 +1,20 @@
-import { addDoc, collection } from "@firebase/firestore";
 import React, { useRef, useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import db from "../../firebase";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
 
-export default function CharacterCreation({
-  setCharacterCreation,
-  setCharacter,
-  character,
-}) {
-  const { characters, updateCharacter } = useData();
-
+export default function CharacterCreation({ setCharacterCreation, character }) {
   const [error, setError] = useState("");
   const [selectedRole, setselectedRole] = useState("");
   const [loading, setLoading] = useState(false);
+
   const nameRef = useRef();
+
   const { currentUser } = useAuth();
+  const { characters, updateCharacter } = useData();
 
   async function handleSubmit(e) {
-    let id = currentUser.id;
     setError("");
     e.preventDefault();
     setLoading(true);
@@ -44,7 +39,6 @@ export default function CharacterCreation({
       }
     }
 
-    const collectionRef = collection(db, "characters");
     character.name = nameRef.current.value;
     character.role = selectedRole;
     character.strength = 5;
@@ -53,9 +47,13 @@ export default function CharacterCreation({
     character.stamina = 5;
     character.critical = 25;
     character.armor = 0;
-    character.gold = 10;
+    character.gold = 10.0;
     character.crystal = 10;
     character.xp = 0;
+    character.materials = {};
+    character.lvl = 1;
+    character.adventurePoint = 80;
+    character.adventurePointReset = new Date(Date.now());
 
     await updateCharacter(character);
     setCharacterCreation(false);

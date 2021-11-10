@@ -10,11 +10,16 @@
     "bootstrap": "^5.1.1",
     "firebase": "^9.0.2",
     "firebase-token-generator": "^2.0.0",
+    "rc-progress": "^3.1.4",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.3",
     "react-dom": "^17.0.2",
+    "react-full-height": "^1.2.2",
+    "react-google-material-icons": "^1.0.4",
+    "react-icons": "^4.3.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
+    "react-svg": "^14.0.17",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

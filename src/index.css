@@ -1,13 +1,311 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Prompt", sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.navlink {
+  color: #707071;
+  text-decoration: none;
+}
+
+.navlink:hover {
+  text-decoration: none;
+  color: #535252;
+}
+
+.logintitle {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Prompt", sans-serif;
+}
+
+.login {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Prompt", sans-serif;
+}
+
+#loginbtn {
+  background-color: #4853ae;
+  border-color: #4853ae;
+}
+
+#resetbtn {
+  background-color: #4853ae;
+  border-color: #4853ae;
+}
+
+#signupbtn {
+  background-color: #4853ae;
+  border-color: #4853ae;
+  margin-bottom: 15px;
+}
+
+.loginlink {
+  color: #4853ae;
+}
+
+.auctiontable {
+  height: 380px;
+  overflow: auto;
+}
+
+#allAuctionSearch {
+  width: 300px;
+}
+
+#craftingtype {
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+#logincard {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  font-family: "Prompt", sans-serif;
+  margin-bottom: 30px;
+  color: white;
+}
+
+#resetpwcard {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  font-family: "Prompt", sans-serif;
+  margin-bottom: 30px;
+  color: white;
+}
+
+#signupcard {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  font-family: "Prompt", sans-serif;
+  margin-bottom: 30px;
+  color: white;
+}
+
+#adventureCount {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  max-width: 300px;
+  margin: auto;
+  margin-top: 20vh;
+  text-align: center;
+}
+
+#addventureFinished {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  max-width: 400px;
+  min-height: 200px;
+  margin: auto;
+  margin-top: 20vh;
+  text-align: center;
+}
+
+#adventureCounter {
+  font-family: "Prompt", sans-serif;
+  font-size: 300%;
+  color: white;
+}
+
+#adventureName {
+  font-family: "Prompt", sans-serif;
+  font-size: 200%;
+  color: white;
+  margin-top: 30px;
+}
+
+#cancelAdventureBtn {
+  color: rgb(50, 48, 54);
+  background-color: white;
+  border-color: white;
+  height: 38px;
+}
+
+#cancelAdventureBtn:hover {
+  color: rgb(50, 48, 54);
+  background-color: rgb(244, 244, 244);
+  border-color: rgb(244, 244, 244);
+}
+
+.login {
+  color: white;
+}
+
+#navCoinIcon {
+  width: 22px;
+  height: 22px;
+}
+
+#navCoin {
+  position: static;
+  margin-top: 30px;
+
+  margin-right: 5px;
+}
+
+#nav {
+  font-family: "Prompt", sans-serif;
+}
+
+#buyAdventureBtn {
+  height: 38px;
+  margin-left: 15px;
+  color: rgb(50, 48, 54);
+  background-color: white;
+  border-color: white;
+}
+
+#buyAdventureBtn:hover {
+  margin-left: 15px;
+  color: rgb(50, 48, 54);
+  background-color: rgb(244, 244, 244);
+  border-color: rgb(244, 244, 244);
+}
+
+#getrewardBtn {
+  background-color: white;
+  color: black;
+  font-family: "Prompt", sans-serif;
+  border-color: white;
+  margin-top: 20px;
+}
+
+#adventureFinishedtitle {
+  color: white;
+  font-family: "Prompt", sans-serif;
+  margin-top: 50px;
+}
+
+.adventure {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  font-family: "Prompt", sans-serif;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.audomargin {
+  margin: auto;
+}
+
+.adventureposs {
+  font-family: "Prompt", sans-serif;
+  font-size: large;
+}
+
+.startAdventureBtn {
+  background-color: white;
+  color: black;
+}
+
+#adventurerogress {
+  margin: auto;
+  bottom: 0;
+}
+
+#adventurepoint {
+  margin-top: 30px;
+}
+
+.adventurepoint {
+  max-width: 300px;
+}
+
+.crafttype {
+  border-radius: 10px;
+}
+
+#charactercontainer {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  font-family: "Prompt", sans-serif;
+  margin-top: 10px;
+  color: white;
+}
+
+#craftingcontainer {
+  background: rgba(174, 172, 172, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(13.5px);
+  -webkit-backdrop-filter: blur(13.5px);
+  border-radius: 10px;
+  font-family: "Prompt", sans-serif;
+  margin-top: 10px;
+  color: white;
+  text-align: center;
+}
+
+#characterimg {
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  margin-bottom: 10px;
+}
+
+#characterstats {
+  text-align: left;
+}
+
+.increaseStat {
+  text-align: right;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.characterStatDisplay {
+  text-align: left;
+}
+
+#characterStatmanagement {
+  max-width: 270px;
+  margin: auto;
+}
+
+.increaseStatinner:hover {
+  padding: 5px;
+  border-radius: 50px;
+  background: linear-gradient(145deg, #d4a4a4, #fdc3c3);
+  box-shadow: 20px 20px 60px #c99b9b, -20px -20px 60px #ffd1d1;
+}
+
+.materialImage {
+  border-radius: 6px;
+}
+
+#returnBtn {
+  background-color: white;
+  color: black;
+  border: white;
+  margin-bottom: 20px;
+  font-family: "Prompt", sans-serif;
+}
+
+.adventurereward {
+  font-size: 120%;
+  color: white;
+  font-family: "Prompt", sans-serif;
 }

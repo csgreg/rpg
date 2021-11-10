@@ -1,35 +1,27 @@
 import { collection, getDocs, query, where } from "@firebase/firestore";
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Col, Container, ProgressBar, Row } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
+import CharacterMaterials from "../Items/CharacterMaterials";
 
 export default function StartNewAdventure({
   setAdventureStarted,
   character,
   adventureStarted,
 }) {
-  const [selectedAdventure, setSelectedAdventure] = useState({});
-  const [showAdventure, setShowAdventure] = useState(false);
-  const [materials, setMaterials] = useState([]);
-  const { adventures, getMaterialsByIds, updateCharacter } = useData();
+  const { adventures, getMaterialById, updateCharacter, getMaterialFile } =
+    useData();
   const [loading, setLoading] = useState(false);
-  const { currentUser } = useAuth();
 
-  async function handleShowAdventure(adventure) {
-    setLoading(true);
-    setMaterials([]);
-    setSelectedAdventure(adventure);
-
-    setMaterials(await getMaterialsByIds(adventure.loot));
-    setShowAdventure(true);
-    setLoading(false);
-  }
-
-  async function handleAdventureStart() {
+  async function handleAdventureStart(selectedAdventure) {
     if (character) {
+      if (character.adventurePoint >= selectedAdventure.time) {
+        character.adventurePoint -= selectedAdventure.time;
+      } else {
+        return;
+      }
       character.adventureStarted = true;
-
       let currentTime = new Date();
       character.adventureStartedAt = currentTime;
 
@@ -48,32 +40,54 @@ export default function StartNewAdventure({
 
   return (
     <div className="m-3">
-      {adventures.map((a) => (
-        <Button
-          disabled={loading}
-          onClick={() => {
-            handleShowAdventure(a);
-          }}
-        >
-          {a.name}
-        </Button>
-      ))}
-      {showAdventure && (
-        <div>
-          <p>Name: {selectedAdventure.name}</p>
-          <p>Biom: {selectedAdventure.biom}</p>
-          <p>Minimum level: {selectedAdventure.minlevel}</p>
-          <p>Time: {selectedAdventure.time} minute</p>
-          {materials.map((m) => (
-            <p>
-              {m.name}: {m.rarity * 100}%
-            </p>
+      <Container className="text-center">
+        <Row lg={3} md={3} sm={1} xs={1}>
+          {adventures.map((a) => (
+            <Container>
+              <div className="adventure">
+                <div style={{ height: "10px" }}></div>
+                <h3 style={{ marginBottom: "20px" }} className="mt-2">
+                  {a.name}
+                </h3>
+                <p>{a.time} minutes</p>
+                <div
+                  style={{
+                    margin: "auto",
+                  }}
+                >
+                  <Row
+                    lg={a.loot.length}
+                    md={a.loot.length}
+                    sm={a.loot.length}
+                    xs={a.loot.length}
+                  >
+                    {a.loot.map((m) => (
+                      <CharacterMaterials
+                        width="40px"
+                        imageName={getMaterialFile(m)}
+                      />
+                    ))}
+                  </Row>
+                </div>
+                <Button
+                  style={{
+                    color: "black",
+                    backgroundColor: "white",
+                    borderColor: "white ",
+                  }}
+                  className="mb-4"
+                  disabled={loading}
+                  onClick={() => {
+                    handleAdventureStart(a);
+                  }}
+                >
+                  Select
+                </Button>
+              </div>
+            </Container>
           ))}
-          <Button disabled={loading} onClick={() => handleAdventureStart()}>
-            Start Adventure
-          </Button>
-        </div>
-      )}
+        </Row>
+      </Container>
     </div>
   );
 }

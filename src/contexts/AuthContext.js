@@ -18,13 +18,10 @@ export function AuthProvider({ children }) {
   //return all because these are promises -> async calls
 
   async function signup(email, password) {
-    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
-
     return await auth.createUserWithEmailAndPassword(email, password);
   }
 
   async function login(email, password) {
-    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
     return auth.signInWithEmailAndPassword(email, password);
   }
 
