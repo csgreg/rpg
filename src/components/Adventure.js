@@ -1,48 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Container, ProgressBar } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { useData } from "../contexts/DataContext";
 import AdventureCountDown from "./Adventure/AdventureCountDown";
 import AdventureFinished from "./Adventure/AdventureFinished";
 import StartNewAdventure from "./Adventure/StartNewAdventure";
-import GNavbar from "./Navbar";
 import db from "../firebase";
-import { collection, doc, onSnapshot } from "@firebase/firestore";
+import { doc, onSnapshot } from "@firebase/firestore";
 
 export default function Adventure() {
-  const { adventures, getCharacterByUserId, updateCharacter, loading } =
-    useData();
-  const { currentUser, characterId } = useAuth();
-
   const [initializing, setInitializing] = useState(true);
-  const [error, setError] = useState("");
   const [character, setCharacter] = useState({});
-  const [characters, setCharacters] = useState({});
   const [characterCreated, setCharacterCreated] = useState(false);
   const [adventureStarted, setAdventureStarted] = useState(false);
   const [adventureEnded, setAdventureEnded] = useState(false);
   const [lootCalculated, setLootCalculated] = useState(false);
 
-  if (initializing && adventures.length !== 0 && character.name !== "") {
-    let c = getCharacterByUserId(currentUser.uid);
-    setCharacter(c);
-    if (c) {
-      setCharacterCreated(true);
-      if (c.adventureStarted) {
-        console.log("adventure started");
-        setAdventureStarted(true);
-        if (c.adventureEnded < Date.now()) {
-          console.log("adventure ended");
-          setAdventureEnded(true);
-          if (c.lootCalculated) {
-            setLootCalculated(true);
+  const { adventures, getCharacterByUserId, updateCharacter, loading } =
+    useData();
+  const { currentUser, characterId } = useAuth();
+
+  /* IF FIRST TIME AND ADVENTURES LOADED ON BACKEND AND CHARACTER CREATED */
+
+  useEffect(() => {
+    if (initializing && adventures.length !== 0 && character.name !== "") {
+      let c = getCharacterByUserId(currentUser.uid);
+      setCharacter(c);
+      if (c.name) {
+        setCharacterCreated(true);
+        if (c.adventureStarted) {
+          /* ADVENTURE STARTED */
+          setAdventureStarted(true);
+          if (c.adventureEnded < Date.now()) {
+            /* ADVENTURE ENDED */
+            setAdventureEnded(true);
+            if (c.lootCalculated) {
+              /* REWARD CALCULATED */
+              setLootCalculated(true);
+            }
           }
         }
+        setInitializing(false);
       }
     }
-    setInitializing(false);
-  }
+  }, [loading, currentUser]);
 
+  /* IF CHARACTER INITIALIZED CHECK CHARACTER'S ADVENTURE POINT */
   useEffect(async () => {
     if (character.adventurePointReset) {
       let date = new Date(character.adventurePointReset.toDate());
@@ -66,6 +69,7 @@ export default function Adventure() {
     }
   }, [initializing]);
 
+  /* KEEP CHARACTER UPDATED */
   useEffect(async () => {
     await onSnapshot(doc(db, "characters", characterId), (doc) => {
       let newcharacter = doc.data();
@@ -99,21 +103,22 @@ export default function Adventure() {
 
   return (
     <div style={{ position: "relative" }}>
-      <Container className="text-center adventureposs">
-        <div className="adventure audomargin adventurepoint">
-          <p id="adventurepoint">
-            Adventure Point: {character.adventurePoint} / 80
-          </p>
-        </div>
-      </Container>
-      {error && <Alert variant="danger">{error}</Alert>}
       {initializing && <div>Loading...</div>}
       {!initializing && !adventureStarted && !adventureEnded && (
-        <StartNewAdventure
-          character={character}
-          setAdventureStarted={setAdventureStarted}
-          adventureStarted={adventureStarted}
-        />
+        <>
+          <Container className="text-center adventureposs">
+            <div className="adventure audomargin adventurepoint">
+              <p id="adventurepoint">
+                Adventure Point: {character.adventurePoint} / 80
+              </p>
+            </div>
+          </Container>
+          <StartNewAdventure
+            character={character}
+            setAdventureStarted={setAdventureStarted}
+            adventureStarted={adventureStarted}
+          />
+        </>
       )}
       {!initializing && adventureStarted && !adventureEnded && (
         <AdventureCountDown

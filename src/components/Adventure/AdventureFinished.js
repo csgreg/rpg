@@ -84,6 +84,10 @@ export default function AdventureFinished({
     character.lootCalculated = false;
 
     character.gold += parseFloat(character.adventuregold);
+    let tmp = character.gold * 100;
+    tmp = parseInt(tmp);
+    character.gold = tmp / 100;
+
     character.xp += parseInt(character.adventurexp);
 
     setAdventureStarted(false);

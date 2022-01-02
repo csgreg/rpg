@@ -28,18 +28,20 @@ export default function Marketplace() {
 
   useEffect(() => {
     if (!loading) {
-      setInitializing(false);
+      if (character.name) {
+        setInitializing(false);
+      }
     }
-  }, [loading]);
+  }, [loading, character]);
 
   return (
     <div>
       {initializing && <div>Loading...</div>}
       {!initializing && (
         <div>
-          <ManageOurAuctions character={character} />
           <AllAuctions character={character} />
           <CreateAuction character={character} />
+          <ManageOurAuctions character={character} />
         </div>
       )}
     </div>

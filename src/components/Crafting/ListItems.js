@@ -17,28 +17,42 @@ import bow from "../../assets/imgs/bow.png";
 
 import ring from "../../assets/imgs/ring.png";
 import neck from "../../assets/imgs/neck.png";
+import CharacterMaterials from "../Items/CharacterMaterials";
 
-export default function ListItems({ character }) {
+export default function ListItems({ character, items }) {
   const [type, setType] = useState("");
   const [subtype, setSubtype] = useState("");
+  const [list, setList] = useState([]);
+  const [selectedItem, setSelectedItem] = useState({});
+  const { getMaterialFile, updateCharacter } = useData();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  /*   function handleCraftItem() {
+  useEffect(() => {
+    const result = items.filter((item) => item.subtype === subtype);
+    setList(result);
+    console.log(result);
+  }, [subtype]);
+
+  async function handleCraftItem() {
     setError("");
-    setloading(true);
-    let enoughMaterial = true;
+    setLoading(true);
+
     for (let m of Object.keys(selectedItem.materials)) {
-      if (character.materials[m] < selectedItem.materials[m]) {
-        enoughMaterial = false;
+      if (!character.materials[m]) {
         setError("Not enough material!");
-        setloading(false);
+        setLoading(false);
+        return;
+      }
+      if (character.materials[m] < selectedItem.materials[m]) {
+        setError("Not enough material!");
+        setLoading(false);
         return;
       }
     }
 
-    if (enoughMaterial) {
-      for (let m of Object.keys(selectedItem.materials)) {
-        character.materials[m] -= parseInt(selectedItem.materials[m]);
-      }
+    for (let m of Object.keys(selectedItem.materials)) {
+      character.materials[m] -= parseInt(selectedItem.materials[m]);
     }
 
     if (character.inventory) {
@@ -48,16 +62,16 @@ export default function ListItems({ character }) {
       character.inventory.push(selectedItem.id);
     }
 
-    updateCharacter(character);
-    setloading(false);
-  } */
+    await updateCharacter(character);
+    setLoading(false);
+  }
 
   return (
     <div className="m-3">
       <Container id="craftingcontainer">
         <Row className="m-2" lg={2} md={2} sm={1} xs={1}>
           <div>
-            <h2 className="mt-3">Crafting</h2>
+            <h2 className="mt-3">Items</h2>
             <Row className="m-3" lg={3} md={3} sm={3} xs={3}>
               <div>
                 <img
@@ -107,7 +121,7 @@ export default function ListItems({ character }) {
                     style={{ width: "50px", height: "50px" }}
                     className="crafttype"
                     src={cloth}
-                    onClick={() => setSubtype("plate")}
+                    onClick={() => setSubtype("cloth")}
                   />
                 </div>
               </Row>
@@ -170,8 +184,59 @@ export default function ListItems({ character }) {
                 </div>
               </Row>
             )}
+            <div>
+              {list.map((item) => (
+                <Button onClick={() => setSelectedItem(item)}>
+                  {item.name}
+                </Button>
+              ))}
+            </div>
           </div>
-          <div>asdasd</div>
+          <div>
+            <h2 className="mt-3">Crafting</h2>
+            {selectedItem.name && (
+              <div>
+                <p>{selectedItem.name}</p>
+                {selectedItem.type === "armor" && (
+                  <>
+                    <p>
+                      {selectedItem.subtype} {selectedItem.use}
+                    </p>
+                    <p>{selectedItem.defense} Armor</p>
+                  </>
+                )}
+                {selectedItem.type === "weapon" && (
+                  <p>
+                    Damage: {selectedItem.damageMin} - {selectedItem.damageMax}
+                  </p>
+                )}
+                {Object.keys(selectedItem.stats).map((s) => (
+                  <p>
+                    {s}: +{selectedItem.stats[s]}
+                  </p>
+                ))}
+                {Object.keys(selectedItem.materials).map((m) => (
+                  <CharacterMaterials
+                    width="40px"
+                    imageName={getMaterialFile(m)}
+                    count={selectedItem.materials[m]}
+                  />
+                ))}
+                <Button
+                  onClick={() => handleCraftItem()}
+                  disabled={loading}
+                  style={{
+                    color: "black",
+                    backgroundColor: "white",
+                    borderColor: "white",
+                  }}
+                  className="mb-3"
+                >
+                  Craft
+                </Button>
+              </div>
+            )}
+          </div>
         </Row>
       </Container>
     </div>

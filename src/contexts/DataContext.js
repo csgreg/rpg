@@ -59,7 +59,7 @@ export function DataProvider({ children }) {
   useEffect(
     async () =>
       await onSnapshot(collection(db, "items"), (snapshot) => {
-        setItems(snapshot.docs.map((doc) => ({ ...doc.data() })));
+        setItems(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       }),
     []
   );
@@ -74,6 +74,14 @@ export function DataProvider({ children }) {
     return materials;
   }
 
+  function getItemById(id) {
+    for (let i of items) {
+      if (i.id === id) {
+        return i;
+      }
+    }
+  }
+
   function getMaterialById(id) {
     for (let m of materials) {
       if (m.id == id) {
@@ -86,6 +94,22 @@ export function DataProvider({ children }) {
     for (let m of materials) {
       if (m.id == id) {
         return m;
+      }
+    }
+  }
+
+  function getItemNameById(id) {
+    for (let m of items) {
+      if (m.id == id) {
+        return m.name;
+      }
+    }
+  }
+
+  function getItemFileById(id) {
+    for (let m of items) {
+      if (m.id == id) {
+        return m.file;
       }
     }
   }
@@ -128,7 +152,8 @@ export function DataProvider({ children }) {
     loading &&
     characters.length !== 0 &&
     adventures.length !== 0 &&
-    materials.length !== 0
+    materials.length !== 0 &&
+    items.length !== 0
   ) {
     setLoading(false);
   }
@@ -146,6 +171,10 @@ export function DataProvider({ children }) {
     getMaterialById,
     updateAuction,
     getMaterialFile,
+    items,
+    getItemNameById,
+    getItemFileById,
+    getItemById,
   };
 
   return (

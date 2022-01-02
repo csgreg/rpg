@@ -54,6 +54,15 @@ export default function CharacterCreation({ setCharacterCreation, character }) {
     character.lvl = 1;
     character.adventurePoint = 80;
     character.adventurePointReset = new Date(Date.now());
+    character.inventory = [];
+
+    //items
+    character.head = "";
+    character.chest = "";
+    character.legs = "";
+    character.weapon = "";
+    character.neck = "";
+    character.ring = "";
 
     await updateCharacter(character);
     setCharacterCreation(false);

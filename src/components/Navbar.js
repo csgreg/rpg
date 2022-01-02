@@ -82,7 +82,7 @@ export default function GNavbar() {
               </NavDropdown.Item>
             </NavDropdown>
 
-            {character.gold ? (
+            {character.gold >= 0 ? (
               <Nav.Link>
                 <span id="navCoin">{character.gold}</span>
                 <img
@@ -94,7 +94,7 @@ export default function GNavbar() {
               ""
             )}
 
-            {character.crystal ? (
+            {character.crystal >= 0 ? (
               <Nav.Link>
                 <span id="navCoin">{character.crystal}</span>
                 <img

@@ -40,13 +40,12 @@ export default function Signup() {
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
           {error && <Alert variant="danger">{error}</Alert>}
-          <Form autoComplete="off" onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-2" id="email">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 placeholder="example@example.com"
                 style={{ background: "transparent" }}
-                autoComplete="off"
                 type="email"
                 ref={emailRef}
                 required
@@ -58,7 +57,6 @@ export default function Signup() {
               <Form.Control
                 placeholder="Password"
                 style={{ background: "transparent" }}
-                autoComplete="off"
                 type="password"
                 ref={passwordlRef}
                 required
@@ -70,7 +68,6 @@ export default function Signup() {
               <Form.Control
                 placeholder="Password confirmation"
                 style={{ background: "transparent" }}
-                autoComplete="off"
                 type="password"
                 ref={passwordConfirmRef}
                 required

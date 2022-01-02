@@ -8,22 +8,28 @@ import db from "../firebase";
 
 export default function Crafting() {
   const [initializing, setInitializing] = useState(true);
-  const { characterId } = useAuth();
-
   const [character, setCharacter] = useState({});
+
+  const { characterId } = useAuth();
+  const { loading, items } = useData();
 
   useEffect(async () => {
     if (characterId)
       await onSnapshot(doc(db, "characters", characterId), (doc) => {
         let newcharacter = doc.data();
         setCharacter({ ...newcharacter, id: characterId });
-        setInitializing(false);
+        if (newcharacter.name) {
+          if (!loading) {
+            setInitializing(false);
+          }
+        }
       });
-  }, [characterId]);
+  }, [characterId, loading]);
 
   return (
     <div>
-      <ListItems character={character} />
+      {initializing && <div>Loading...</div>}
+      {!initializing && <ListItems items={items} character={character} />}
     </div>
   );
 }

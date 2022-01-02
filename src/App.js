@@ -21,10 +21,6 @@ function App() {
         backgroundImage: `url("https://firebasestorage.googleapis.com/v0/b/rpggame-e41ae.appspot.com/o/Images%2Fha%CC%81tte%CC%81r.png?alt=media&token=955a5178-d17c-4a4c-bce0-b8a16d8c1979")`,
         backgroundPosition: "center",
         backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        width: "100vw",
-        height: "100vh",
-        backgroundAttachment: "fixed",
       }}
     >
       <Router>

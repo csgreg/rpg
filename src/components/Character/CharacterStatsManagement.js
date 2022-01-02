@@ -1,6 +1,5 @@
-import { doc, setDoc } from "@firebase/firestore";
 import React, { useState } from "react";
-import { Button, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { useData } from "../../contexts/DataContext";
 import { FaPlus } from "react-icons/fa";
 import coin from "../../assets/imgs/coin.png";
